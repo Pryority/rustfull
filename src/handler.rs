@@ -121,8 +121,56 @@ async fn create_product_handler(
     }
 }
 
-// TODO: Implement update_product_handler
 // UPDATE PRODUCT
+#[patch("/products/{sku}")]
+async fn edit_product_handler(
+    path: web::Path<u32>,
+    body: web::Json<UpdateProductSchema>,
+    data: web::Data<AppState>,
+) -> impl Responder {
+    let product_sku = path.into_inner();
+    let query_result = sqlx::query_as!(
+        ProductModel,
+        "SELECT * FROM products WHERE sku = $1",
+        product_sku as i32
+    )
+    .fetch_one(&data.db)
+    .await;
+
+    if query_result.is_err() {
+        let message = format!("Product with SKU: {}", product_sku);
+        return HttpResponse::NotFound().json(serde_json::json!({"status": "fail", "message": message}));
+    }
+
+    let product = query_result.unwrap();
+
+    let query_result = sqlx::query_as!(
+        ProductModel,
+        "UPDATE products SET title = $1, description = $2, quantity = $4, price = $5, sale_price = $6 WHERE sku = $3 RETURNING *",
+        body.title.to_owned().unwrap_or(product.title),
+        body.description.to_owned().unwrap_or(product.description),
+        product_sku as i32,
+        body.quantity.to_owned().unwrap_or(product.quantity.try_into().unwrap()) as i32,
+        body.price.to_owned().unwrap_or(product.price.try_into().unwrap()) as i32,
+        body.sale_price.to_owned().unwrap_or(product.sale_price.try_into().unwrap()) as i32,
+    )
+    .fetch_one(&data.db)
+    .await;
+
+    match query_result {
+        Ok(product) => {
+            let product_response = serde_json::json!({"status": "succcess", "data": serde_json::json!({
+                "product": product
+            })});
+
+            return HttpResponse::Ok().json(product_response);
+        }
+        Err(err) => {
+            let message = format!("Error: {:?}", err);
+            return HttpResponse::InternalServerError().json(serde_json::json!({"status": "fail", "message": message}));
+        }
+    }
+}
 
 
 pub fn config(conf: &mut web::ServiceConfig) {
@@ -130,7 +178,8 @@ pub fn config(conf: &mut web::ServiceConfig) {
         .service(health_checker_handler)
         .service(product_list_handler)
         .service(create_product_handler)
-        .service(get_product_handler);
+        .service(get_product_handler)
+        .service(edit_product_handler);
 
     conf.service(scope);
 }
