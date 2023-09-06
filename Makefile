@@ -44,12 +44,12 @@ test:
 	go test -v ./cmd/server/db/sqlc
 
 start-docker:
-	docker build -t cambia .
-	docker run -d --name cambia-app -p 8080:8080 cambia
+	docker build -t postgres-rs .
+	docker run -d --name postgres-rs -p 8080:8080 postgres-rs
 
 stop-docker:
-	docker stop cambia-app
-	docker rm cambia-app
+	docker stop postgres-rs
+	docker rm postgres-rs
 
 start-live-reload:
 	air
