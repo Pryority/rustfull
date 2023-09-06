@@ -1,6 +1,6 @@
 # Postgres Database with Rust Backend using SQLx
 
-## I am trying to learn Rust
+## - - - - - - - - - - - - - - - - -
 
 ### Database Setup
 
@@ -14,10 +14,31 @@ Use the Makefile commands to setup a Postgres database using Docker:
 
     ![TablePlusConnectionDemo](./tableplus-connection.png)
 
-    You can also access the PostgreSQL console from within the Docker container.
+    You can also access the PostgreSQL shell directly with:
+
+    ```bash
+    PGPASSWORD="secret" psql -U root -h localhost -p 2345 postgres-rs
+    ```
+
+    We have not migrated the database yet or created any tables, so if you enter `\dt` to list the relations in the database, you should see **`Did not find any relations.`** printed. We will try again after migrating.
 
     To end off, once you are connected or able to view the database and its tables, you should see there are no tables yet. We will migrate the database to add the initial tables.
 
 2. `make mup` will run a SQLx database migration to create the tables.
 
     Now refresh or check the database and you should see the newly created product table with the columns provided in **[migrations/0001_product_table.up.sql](migrations/0001_product_table.up.sql)**.
+
+    Again, you can also check the database by accessing the PostgreSQL shell directly with:
+
+    ```bash
+    PGPASSWORD="secret" psql -U root -h localhost -p 2345 postgres-rs
+    ```
+
+    Then typing `\dt` to display a list of all the database relations.
+
+    The result should look something like this table:
+
+    | Schema | Name              | Type   | Owner
+    | ------ | ----------------- | ------ | ------
+    | public | _sqlx_migrations  | table  | root
+    | public | product           | table  | root
