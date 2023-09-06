@@ -31,7 +31,7 @@ Use the Makefile commands to setup a Postgres database using Docker:
     Again, you can also check the database by accessing the PostgreSQL shell directly with:
 
     ```bash
-    PGPASSWORD="secret" psql -U root -h localhost -p 2345 postgres-rs
+    PGPASSWORD="password123" psql -U root -h localhost -p 2345 postgreSQLx
     ```
 
     Then typing `\dt` to display a list of all the database relations.
