@@ -19,10 +19,10 @@ createdb:
 	docker exec -it $(POSTGRES_CONTAINER) createdb --username=$(POSTGRES_USER) --owner=$(POSTGRES_USER) $(POSTGRES_DB)
 
 mup:
-	sqlx migrate run --database-url postgres://root:secret@localhost:2345/postgres-rs?sslmode=disable
+	sqlx migrate run --database-url $(DATABASE_URL)
 
 mdown:
-	sqlx migrate revert $(DATABASE_URL)
+	sqlx migrate revert --database-url $(DATABASE_URL)
 
 dropdb:
 	docker exec -it postgres-rs psql -U root -d postgres -c "SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'postgres-rs';"
@@ -30,15 +30,6 @@ dropdb:
 
 droptables:
 	docker exec -it postgres-rs psql -U root -d postgres-rs -c "$(foreach table,$(TABLES),DROP TABLE IF EXISTS $(table);)"
-
-sqlx:
-	sqlx generate
-
-install:
-	cd web && npm install
-
-dev:
-	air
 
 test:
 	go test -v ./cmd/server/db/sqlc
@@ -51,13 +42,10 @@ stop-docker:
 	docker stop postgres-rs
 	docker rm postgres-rs
 
-start-live-reload:
-	air
-
-start: start-docker start-live-reload
-
-restart: dropdb createdb mup
+start: start-docker
 
 stop: stop-docker
 
-.PHONY: postgres createdb dropdb install dev start stop droptables mup mdown sqlx restart
+restart: dropdb createdb mup
+
+.PHONY: postgres createdb dropdb droptables start stop restart mup mdown 
