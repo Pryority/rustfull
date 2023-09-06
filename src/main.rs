@@ -1,4 +1,6 @@
-use sqlx::Row;
+use actix_web::middleware::Logger;
+use actix_web::{get, App, HttpResponse, HttpServer, Responder};
+use serde_json::json;
 use std::error::Error;
 
 struct Product {
@@ -43,26 +45,49 @@ async fn update(product: &Product, sku: &str, pool: &sqlx::PgPool) -> Result<(),
     Ok(())
 }
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
-    let url = "postgres://root:secret@localhost:2345/postgres-rs?sslmode=disable";
-    let pool = sqlx::postgres::PgPool::connect(url).await?;
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    if std::env::var_os("RUST_LOG").is_none() {
+        std::env::set_var("RUST_LOG", "actix_web=info");
+    }
 
-    sqlx::migrate!("./migrations").run(&pool).await?;
+    env_logger::init();
 
-    let product = Product {
-        title: "A Beautiful Painting".to_string(),
-        description:
-            "Owned by the Multi-billionaire Matthias, this painting has been passed down for generations."
-                .to_string(),
-        sku: "14003".to_string(),
-        quantity: 15,
-        price: 999999,
-        sale_price: 899999,
-    };
+    println!("\n\t🦀 Server started!\n");
+
+    HttpServer::new(move || {
+        App::new()
+            .service(health_checker_handler)
+            .wrap(Logger::default())
+    })
+    .bind(("127.0.0.1", 8000))?
+    .run()
+    .await
+    // let url = "postgres://root:secret@localhost:2345/postgres-rs?sslmode=disable";
+    // let pool = sqlx::postgres::PgPool::connect(url).await?;
+
+    // sqlx::migrate!("./migrations").run(&pool).await?;
+
+    // let product = Product {
+    //     title: "A Beautiful Painting".to_string(),
+    //     description:
+    //         "Owned by the Multi-billionaire Matthias, this painting has been passed down for generations."
+    //             .to_string(),
+    //     sku: "14003".to_string(),
+    //     quantity: 15,
+    //     price: 999999,
+    //     sale_price: 899999,
+    // };
 
     // create(&product, &pool).await?;
-    update(&product, &product.sku, &pool).await?;
+    // update(&product, &product.sku, &pool).await?;
 
-    Ok(())
+    // Ok(())
+}
+
+#[get("/api/health")]
+async fn health_checker_handler() -> impl Responder {
+    const MESSAGE: &str = "CRUD API with Rust, SQLx, Postgre, and Actix Web";
+
+    HttpResponse::Ok().json(json!({"status": "success", "message": MESSAGE}))
 }
