@@ -52,5 +52,5 @@ Use the Makefile commands to setup a Postgres database using Docker:
     The output of the product table should have the columns provided in **[migrations/0001_product_table.up.sql](migrations/0001_product_table.up.sql)**, which should look something like this:
 
     | id | title | description | sku | quantity | price | sale_price
-
-    |----|-------|-------------|-----|----------|-------|------------
+    | -- | ----- | ----------- | --- | -------- | ----- | -----------
+    |    |       |             |     |          |       |
