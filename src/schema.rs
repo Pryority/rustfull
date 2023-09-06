@@ -11,13 +11,14 @@ pub struct FilterOptions {
 #[derive(Deserialize, Debug)]
 pub struct ParamOptions {
     pub id: String,
+    pub sku: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreateProductSchema {
     pub title: String,
     pub description: String,
-    pub sku: String,
+    pub sku: u32,
     pub quantity: u32,
     pub price: u32,
     pub sale_price: u32,
@@ -27,7 +28,7 @@ pub struct CreateProductSchema {
 pub struct UpdateProductSchema {
     pub title: Option<String>,
     pub description: Option<String>,
-    pub sku: Option<String>,
+    pub sku: Option<u32>,
     pub quantity: Option<u32>,
     pub price: Option<u32>,
     pub sale_price: Option<u32>,
