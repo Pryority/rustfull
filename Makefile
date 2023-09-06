@@ -2,7 +2,7 @@
 start: start-docker
 stop: stop-docker
 shutdown: shutdown-docker
-restart: stop start rlog
+recreate: shutdown start rlog
 
 # Alias targets for migrating the databases
 mup: migrate-up
@@ -38,7 +38,7 @@ shutdown-docker:
 	@echo "\n\t📛 Docker containers postgreSQLx and postgresAdmin have been stopped and removed.\n"
 
 rlog:
-	@echo "\n️🔄🌱  POSTGRES DATABASE RESTARTED"
+	@echo "\n️🔄🌱  POSTGRES DATABASE RECREATED"
 
 # Declare all targets as phony (no real files associated)
-.PHONY: postgres start stop shutdown restart mup mdown dev
+.PHONY: postgres start stop shutdown recreate mup mdown dev
