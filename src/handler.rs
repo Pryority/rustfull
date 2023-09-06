@@ -22,7 +22,7 @@ pub async fn product_list_handler(
     opts: web::Query<FilterOptions>,
     data: web::Data<AppState>,
 ) -> impl Responder {
-    let limit = opts.limit.unwrap();
+    let limit = opts.limit.unwrap_or(10);
     let offset = (opts.page.unwrap_or(1) - 1) * limit;
 
     let query_result = sqlx::query_as!(
@@ -172,6 +172,27 @@ async fn edit_product_handler(
     }
 }
 
+// DELETE PRODUCT
+#[delete("/products/{sku}")]
+async fn delete_product_handler(
+    path: web::Path<u32>,
+    data: web::Data<AppState>,
+) -> impl Responder {
+    let product_sku = path.into_inner();
+    let rows_affected = sqlx::query!("DELETE FROM products WHERE sku = $1", product_sku as i32)
+    .execute(&data.db)
+    .await
+    .unwrap()
+    .rows_affected();
+
+    if rows_affected == 0 {
+        let message = format!("Product with SKU: {} not found", product_sku);
+        return HttpResponse::NotFound().json(json!({"status": "fail", "message": message}));
+    }
+
+    HttpResponse::NoContent().finish()
+}
+
 
 pub fn config(conf: &mut web::ServiceConfig) {
     let scope = web::scope("/api")
@@ -179,7 +200,8 @@ pub fn config(conf: &mut web::ServiceConfig) {
         .service(product_list_handler)
         .service(create_product_handler)
         .service(get_product_handler)
-        .service(edit_product_handler);
+        .service(edit_product_handler)
+        .service(delete_product_handler);
 
     conf.service(scope);
 }
