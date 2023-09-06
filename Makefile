@@ -35,7 +35,7 @@ start-docker:
 stop-docker:
 	docker stop postgreSQLx postgresAdmin
 	docker rm postgreSQLx postgresAdmin
-	@echo "\n\t📛 Docker containers postgreSQLx and postgresAdmin have been stopped and removed."
+	@echo "\n\t📛 Docker containers postgreSQLx and postgresAdmin have been stopped and removed.\n"
 
 # Declare all targets as phony (no real files associated)
 .PHONY: postgres start stop restart mup mdown dev
