@@ -54,3 +54,18 @@ Use the Makefile commands to setup a Postgres database using Docker:
     | id | title | description | sku | quantity | price | sale_price
     | -- | ----- | ----------- | --- | -------- | ----- | -----------
     |    |       |             |     |          |       |
+
+## API
+
+Example body of a POST request to the */api/products* endpoint to create a new product.
+
+```json
+{
+  "title": "My Product",
+  "description": "This is a really great product and you should buy it",
+  "sku": "15009",
+  "quantity": 44,
+  "price": 1499,
+  "sale_price": 999
+}
+```
