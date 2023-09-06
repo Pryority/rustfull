@@ -16,6 +16,7 @@ async fn health_checker_handler() -> impl Responder {
     HttpResponse::Ok().json(json!({"status": "success", "message": MESSAGE}))
 }
 
+// GET ALL PRODUCTS
 #[get("/products")]
 pub async fn product_list_handler(
     opts: web::Query<FilterOptions>,
@@ -49,6 +50,41 @@ pub async fn product_list_handler(
     HttpResponse::Ok().json(json_response)
 }
 
+// GET SINGLE PRODUCT
+#[get("/products/{sku}")]
+async fn get_product_handler(
+    path: web::Path<u32>,
+    data: web::Data<AppState>,
+) -> impl Responder {
+    let product_sku = path.into_inner();
+    let query_result = sqlx::query_as!(
+        ProductModel,
+        "SELECT * FROM products where sku = $1",
+        product_sku as i32
+    )
+    .fetch_one(&data.db)
+    .await;
+
+    match query_result {
+        Ok(product) => {
+            let product_response = serde_json::json!({
+                "status": "success",
+                "data": serde_json::json!({"product": product })
+            });
+
+            return HttpResponse::Ok().json(product_response)
+        }
+        Err(_) => {
+            let message = format!("Product with ID: {}", product_sku);
+            return HttpResponse::NotFound().json(serde_json::json!({
+                "status": "fail", 
+                "message": message
+            }));
+        }
+    }
+}
+
+// CREATE PRODUCT
 #[post("/products")]
 async fn create_product_handler(
     body: web::Json<CreateProductSchema>,
@@ -59,7 +95,7 @@ async fn create_product_handler(
         "INSERT INTO products (title,description,sku,quantity,price,sale_price) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
         body.title.to_string(),
         body.description.to_string(),
-        body.sku.to_string(),
+        body.sku as i32,
         body.quantity as i32,
         body.price as i32,
         body.sale_price as i32,
@@ -85,11 +121,16 @@ async fn create_product_handler(
     }
 }
 
+// TODO: Implement update_product_handler
+// UPDATE PRODUCT
+
+
 pub fn config(conf: &mut web::ServiceConfig) {
     let scope = web::scope("/api")
         .service(health_checker_handler)
         .service(product_list_handler)
-        .service(create_product_handler);
+        .service(create_product_handler)
+        .service(get_product_handler);
 
     conf.service(scope);
 }
