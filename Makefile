@@ -1,16 +1,11 @@
 # Alias targets for starting and stopping Docker containers
 start: start-docker
 stop: stop-docker
+shutdown: shutdown-docker
+restart: stop start rlog
 
 # Alias targets for migrating the databases
 mup: migrate-up
-
-# Alias target that stops & removes the database containers, 
-# then creates and starts them up again
-restart: stop start rlog
-
-rlog:
-	@echo "\n️🔄🌱  POSTGRES DATABASE RESTARTED"
 
 # Development target for running your Rust application with cargo-watch
 dev:
@@ -31,11 +26,19 @@ start-docker:
 	docker-compose up -d
 	@echo "\n\t🐳 Docker containers postgreSQLx and postgresAdmin have been created and started."
 
-# Target for stopping and removing Docker containers
+# Target for stopping Docker containers
 stop-docker:
+	docker stop postgreSQLx postgresAdmin
+	@echo "\n\t🛑 Docker containers postgreSQLx and postgresAdmin have been stopped.\n"
+
+# Target for both stopping and removing Docker containers
+shutdown-docker:
 	docker stop postgreSQLx postgresAdmin
 	docker rm postgreSQLx postgresAdmin
 	@echo "\n\t📛 Docker containers postgreSQLx and postgresAdmin have been stopped and removed.\n"
 
+rlog:
+	@echo "\n️🔄🌱  POSTGRES DATABASE RESTARTED"
+
 # Declare all targets as phony (no real files associated)
-.PHONY: postgres start stop restart mup mdown dev
+.PHONY: postgres start stop shutdown restart mup mdown dev
