@@ -62,12 +62,3 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-
-struct Product {
-    pub title: String,
-    pub description: String,
-    pub sku: String,
-    pub quantity: u32,
-    pub price: u32,
-    pub sale_price: u32,
-}
