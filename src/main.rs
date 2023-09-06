@@ -18,6 +18,7 @@ async fn create(product: &Product, pool: &sqlx::PgPool) -> Result<(), Box<dyn Er
         .bind(&product.title)
         .bind(&product.description)
         .bind(&product.sku)
+        .bind(product.quantity as i32)
         .bind(product.price as i32) // Convert u32 to i32
         .bind(product.sale_price as i32) // Convert u32 to i32
         .execute(pool)
@@ -25,6 +26,23 @@ async fn create(product: &Product, pool: &sqlx::PgPool) -> Result<(), Box<dyn Er
 
     Ok(())
 }
+
+async fn update(product: &Product, sku: &str, pool: &sqlx::PgPool) -> Result<(), Box<dyn Error>> {
+    let query = "UPDATE product SET title = $1, description = $2, sku = $3, quantity = $4, price = $5, sale_price = $6 WHERE sku = $3";
+
+    sqlx::query(query)
+        .bind(&product.title)
+        .bind(&product.description)
+        .bind(&product.sku)
+        .bind(product.quantity as i32)
+        .bind(product.price as i32)
+        .bind(product.sale_price as i32)
+        .execute(pool)
+        .await?;
+
+    Ok(())
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let url = "postgres://root:secret@localhost:2345/postgres-rs?sslmode=disable";
@@ -33,17 +51,18 @@ async fn main() -> Result<(), Box<dyn Error>> {
     sqlx::migrate!("./migrations").run(&pool).await?;
 
     let product = Product {
-        title: "A Repulsive Painting".to_string(),
+        title: "A Beautiful Painting".to_string(),
         description:
-            "Owned by the Late King Matthias, this painting has been passed down for generations."
+            "Owned by the Multi-billionaire Matthias, this painting has been passed down for generations."
                 .to_string(),
         sku: "14003".to_string(),
         quantity: 15,
-        price: 49999,
-        sale_price: 44999,
+        price: 999999,
+        sale_price: 899999,
     };
 
-    create(&product, &pool).await?;
+    // create(&product, &pool).await?;
+    update(&product, &product.sku, &pool).await?;
 
     Ok(())
 }
