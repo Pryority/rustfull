@@ -1,6 +1,6 @@
 # Postgres Database with Rust Backend using SQLx
 
-## - - - - - - - - - - - - - - - - -
+## Stack: [SQLx](https://github.com/launchbadge/sqlx)
 
 ### Database Setup
 
