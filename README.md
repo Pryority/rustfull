@@ -51,9 +51,9 @@ Use the Makefile commands to setup a Postgres database using Docker:
 
     The output of the product table should have the columns provided in **[migrations/0001_product_table.up.sql](migrations/0001_product_table.up.sql)**, which should look something like this:
 
-    | id | title | description | sku | quantity | price | sale_price
-    | -- | ----- | ----------- | --- | -------- | ----- | -----------
-    |    |       |             |     |          |       |
+    | id | title | description | sku | category | quantity | price | sale_price | on_sale
+    | -- | ----- | ----------- | --- | -------- | -------- | ----- | ---------- | -------
+    |    |       |             |     |          |          |       |            |
 
 ## API
 
@@ -63,9 +63,11 @@ Example body of a POST request to the */api/products* endpoint to create a new p
 {
   "title": "My Product",
   "description": "This is a really great product and you should buy it",
-  "sku": "15009",
-  "quantity": 44,
-  "price": 1499,
-  "sale_price": 999
+  "sku": 15010,
+  "category": "Sports",
+  "quantity": 15,
+  "price": 499,
+  "sale_price": 299,
+  "on_sale": false
 }
 ```
