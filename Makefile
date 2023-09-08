@@ -4,12 +4,18 @@ stop: stop-docker
 shutdown: shutdown-docker
 recreate: shutdown start rlog
 
+# Development alias for starting the backend and frontend
+# TODO: make this alias execute the targets concurrently
+#dev: serve trunk
+
 # Alias targets for migrating the databases
 mup: migrate-up
 
 # Development target for running your Rust application with cargo-watch
-dev:
-	cargo watch -q -c -w ./backend/src/ -x run
+serve:
+	cd backend && cargo watch -q -c -w ./src/ -x run
+trunk:
+	cd frontend && trunk serve --port 3000
 
 # Target for running migrations
 migrate-up:
