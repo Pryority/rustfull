@@ -1,3 +1,5 @@
+// common/src/lib.rs
+
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -24,7 +26,7 @@ pub struct ProductResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct FeedbackListResponse {
+pub struct ProductListResponse {
     pub status: String,
     pub results: i32,
     pub products: Vec<Product>,
