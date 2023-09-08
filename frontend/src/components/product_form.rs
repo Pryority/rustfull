@@ -16,8 +16,11 @@ pub fn ProductForm() -> Html {
     let title = use_state(String::new);
     let description = use_state(String::new);
     let sku: UseStateHandle<i32> = use_state(|| 0);
+    let category = use_state(String::new);
+    let quantity = use_state(|| 0);
     let price = use_state(|| 0);
     let sale_price = use_state(|| 0);
+    let on_sale = use_state(|| false);
 
     let title_input_ref = use_node_ref();
     let desc_input_ref = use_node_ref();
@@ -70,11 +73,39 @@ pub fn ProductForm() -> Html {
                 class="w-full border p-1"
             />
             <input
-                type="number"
-                placeholder="SKU"
-                ref={sku_input_ref}
-                oninput={handle_sku_input}
-                class="w-full border p-1"
+            type="number"
+            placeholder="SKU"
+            ref={sku_input_ref}
+            oninput={handle_sku_input}
+            class="w-full border p-1"
+            />
+            <input
+            type="select"
+            placeholder="Category"
+            // ref={desc_input_ref}
+            // oninput={handle_description_input}
+            class="w-full border p-1"
+            />
+            <input
+            type="number"
+            placeholder="Price ($)"
+            // ref={sku_input_ref}
+            // oninput={handle_sku_input}
+            class="w-full border p-1"
+            />
+            <input
+            type="number"
+            placeholder="Sale Price ($)"
+            // ref={sku_input_ref}
+            // oninput={handle_sku_input}
+            class="w-full border p-1"
+            />
+            <input
+            type="radio"
+            placeholder="Is this product on sale?"
+            // ref={sku_input_ref}
+            // oninput={handle_sku_input}
+            class="w-full border p-1"
             />
 
             <button >{"Submit"}</button>
