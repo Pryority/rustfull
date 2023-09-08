@@ -3,7 +3,7 @@
 ## Stack: [SQLx](https://github.com/launchbadge/sqlx), [Yew](https://github.com/yewstack/yew)
 
 <p align="center">
-  <img width="460" height="300" src="./product-creation-demo.png">
+  <img width="600" height="840"  src="./product-creation-demo.png">
 </p>
 
 ## Backend
