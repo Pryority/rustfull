@@ -2,6 +2,10 @@
 
 ## Stack: [SQLx](https://github.com/launchbadge/sqlx), [Yew](https://github.com/yewstack/yew)
 
+<p align="center">
+  <img width="460" height="300" src="./product-creation-demo.png">
+</p>
+
 ### Database Setup
 
 Use the Makefile commands to setup a Postgres database using Docker:
@@ -12,7 +16,9 @@ Use the Makefile commands to setup a Postgres database using Docker:
 
     To create the connection using this example, the name of the PostgreSQL database is *postgreSQLx*, the host/socket is localhost (127.0.0.1), the port is *2345* (this can be changed to 5432 which is the default port for PostgreSQL, but I already have a container at 5432 on my machine, so I changed it), the user is *root*, the password is *secret*, and the database is *postgreSQLx*.
 
-    ![TablePlusConnectionDemo](./tableplus-connection.png)
+    <p align="center">
+      <img width="460" height="512" src="./tableplus-connection.png">
+    </p>
 
     You can also access the PostgreSQL shell directly with:
 
