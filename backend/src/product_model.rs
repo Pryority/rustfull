@@ -1,4 +1,4 @@
-// src/product_model.rs
+// backend/src/product_model.rs
 
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
