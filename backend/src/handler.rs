@@ -88,13 +88,15 @@ async fn create_product_handler(
 ) -> impl Responder {
     let query_result = sqlx::query_as!(
         ProductModel,
-        "INSERT INTO products (title,description,sku,quantity,price,sale_price) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+        "INSERT INTO products (title,description,sku,category,quantity,price,sale_price,on_sale) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
         body.title.to_string(),
         body.description.to_string(),
         body.sku as i32,
+        body.description.to_string(),
         body.quantity as i32,
         body.price as i32,
         body.sale_price as i32,
+        body.on_sale
     )
     .fetch_one(&data.db)
     .await;
@@ -147,13 +149,15 @@ async fn edit_product_handler(
 
     let query_result = sqlx::query_as!(
         ProductModel,
-        "UPDATE products SET title = $1, description = $2, quantity = $4, price = $5, sale_price = $6 WHERE sku = $3 RETURNING *",
+        "UPDATE products SET title = $1, description = $2, category = $4, quantity = $5, price = $6, sale_price = $7, on_sale = $8 WHERE sku = $3 RETURNING *",
         body.title.to_owned().unwrap_or(product.title),
         body.description.to_owned().unwrap_or(product.description),
         product_sku as i32,
+        body.category.to_owned().unwrap_or(product.category),
         body.quantity.to_owned().unwrap_or(product.quantity.try_into().unwrap()) as i32,
         body.price.to_owned().unwrap_or(product.price.try_into().unwrap()) as i32,
         body.sale_price.to_owned().unwrap_or(product.sale_price.try_into().unwrap()) as i32,
+        body.on_sale.to_owned().unwrap_or(product.on_sale.try_into().unwrap()) as bool,
     )
     .fetch_one(&data.db)
     .await;
