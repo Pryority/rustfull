@@ -29,3 +29,5 @@ pub async fn api_create_product(product_data: &str) -> Result<Product, String> {
         Err(_) => Err("Failed to parse response".to_string()),
     }
 }
+
+// TODO: add other api_ functions for CRUD
