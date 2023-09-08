@@ -3,7 +3,7 @@
 ## Stack: [SQLx](https://github.com/launchbadge/sqlx), [Yew](https://github.com/yewstack/yew)
 
 <p align="center">
-  <img width="600" height="840"  src="./product-creation-demo.png">
+  <img width="900" height="600"  src="./product-creation-demo.png">
 </p>
 
 ## Backend
@@ -24,7 +24,7 @@ Use the Makefile commands to setup a Postgres database using Docker:
     *root*, the password is *secret*, and the database is *postgreSQLx*.
 
     <p align="center">
-      <img width="840" height="600" src="./tableplus-connection.png">
+      <img width="620" height="500" src="./tableplus-connection.png">
     </p>
 
     You can also access the PostgreSQL shell directly with:
