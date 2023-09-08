@@ -6,6 +6,8 @@
   <img width="460" height="300" src="./product-creation-demo.png">
 </p>
 
+## Backend
+
 ### Database Setup
 
 Use the Makefile commands to setup a Postgres database using Docker:
@@ -22,7 +24,7 @@ Use the Makefile commands to setup a Postgres database using Docker:
     *root*, the password is *secret*, and the database is *postgreSQLx*.
 
     <p align="center">
-      <img width="600" height="512" src="./tableplus-connection.png">
+      <img width="840" height="600" src="./tableplus-connection.png">
     </p>
 
     You can also access the PostgreSQL shell directly with:
@@ -74,7 +76,12 @@ Use the Makefile commands to setup a Postgres database using Docker:
   | -- | ----- | ----------- | --- | -------- | -------- | ----- | ---------- | -------
   |    |       |             |     |          |          |       |            |
 
-## API
+  **Note: If you ever have issues with the database,**
+  **running `make recreate` might help.**
+
+## Frontend
+
+### API
 
 Example body of a POST request to the */api/products* endpoint to create a new product.
 
