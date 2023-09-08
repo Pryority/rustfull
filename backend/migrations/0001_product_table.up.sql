@@ -5,9 +5,11 @@ CREATE TABLE products (
     title VARCHAR NOT NULL,
     description TEXT NOT NULL,
     sku INTEGER NOT NULL,
+    category TEXT NOT NULL,
     quantity INTEGER NOT NULL,
     price INTEGER NOT NULL,
-    sale_price INTEGER NOT NULL
+    sale_price INTEGER NOT NULL,
+    on_sale BOOLEAN NOT NULL
 );
 
 CREATE UNIQUE INDEX product_sku ON products (sku);
