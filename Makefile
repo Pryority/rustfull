@@ -11,9 +11,10 @@ recreate: shutdown start rlog
 # Alias targets for migrating the databases
 mup: migrate-up
 
-# Development target for running your Rust application with cargo-watch
+# Development target for running the application's backend with cargo-watch
 serve:
 	cd backend && cargo watch -q -c -w ./src/ -x run
+# Development target for running the application's frontend with trunk
 trunk:
 	cd frontend && trunk serve --port 3000
 
@@ -47,4 +48,4 @@ rlog:
 	@echo "\n️🔄🌱  POSTGRES DATABASE RECREATED"
 
 # Declare all targets as phony (no real files associated)
-.PHONY: postgres start stop shutdown recreate mup mdown dev
+.PHONY: postgres start stop shutdown recreate mup mdown dev trunk serve
