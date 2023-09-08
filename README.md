@@ -1,6 +1,6 @@
 # Postgres Database with SQLx Queries
 
-## Stack: [SQLx](https://github.com/launchbadge/sqlx)
+## Stack: [SQLx](https://github.com/launchbadge/sqlx), [Yew](https://github.com/yewstack/yew)
 
 ### Database Setup
 
