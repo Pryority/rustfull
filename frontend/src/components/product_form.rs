@@ -41,6 +41,7 @@ pub fn ProductForm() -> Html {
     let quantity_input_ref = use_node_ref();
     let price_input_ref = use_node_ref();
     let sale_price_input_ref = use_node_ref();
+    let on_sale_select_ref = use_node_ref();
 
     let handle_title_input = {
         let title = title.clone();
@@ -137,12 +138,17 @@ pub fn ProductForm() -> Html {
         let cloned_title = title.clone();
         let cloned_desc_input_ref = desc_input_ref.clone();
         let cloned_description = description.clone();
+        let cloned_sku_input_ref = sku_input_ref.clone();
         let cloned_sku = sku.clone();
         let cloned_category_input_ref = category_select_ref.clone();
         let cloned_category = category.clone();
+        let cloned_quantity_input_ref = quantity_input_ref.clone();
         let cloned_quantity = quantity.clone();
+        let cloned_price_input_ref = price_input_ref.clone();
         let cloned_price = price.clone();
+        let cloned_sale_price_input_ref = sale_price_input_ref.clone();
         let cloned_sale_price = sale_price.clone();
+        let cloned_on_sale_select_ref = on_sale_select_ref.clone();
         let cloned_on_sale = on_sale.clone();
 
         Callback::from(move |event: SubmitEvent| {
@@ -151,24 +157,18 @@ pub fn ProductForm() -> Html {
             let title = cloned_title.clone();
             let desc_input_ref = cloned_desc_input_ref.clone();
             let description = cloned_description.clone();
+            let sku_input_ref = cloned_sku_input_ref.clone();
             let sku = cloned_sku.clone();
             let category_input_ref = cloned_category_input_ref.clone();
             let category = cloned_category.clone();
+            let quantity_input_ref = cloned_quantity_input_ref.clone();
             let quantity = cloned_quantity.clone();
+            let price_input_ref = cloned_price_input_ref.clone();
             let price = cloned_price.clone();
+            let sale_price_input_ref = cloned_sale_price_input_ref.clone();
             let sale_price = cloned_sale_price.clone();
+            let on_sale_select_ref = cloned_on_sale_select_ref.clone();
             let on_sale = cloned_on_sale.clone();
-
-            // let product = Product {
-            //     title: *title.clone(),
-            //     description: *description.clone(),
-            //     sku: *sku.clone(),
-            //     category: *category.clone(),
-            //     quantity: *quantity.clone(),
-            //     price: *price.clone(),
-            //     sale_price: *sale_price.clone(),
-            //     on_sale: *on_sale.clone(),
-            // };
 
             event.prevent_default();
             set_loading(true, dispatch.clone());
@@ -229,13 +229,23 @@ pub fn ProductForm() -> Html {
                 let desc_input = desc_input_ref.cast::<HtmlInputElement>().unwrap();
                 desc_input.set_value("");
                 description.set(String::new());
+                let sku_input = sku_input_ref.cast::<HtmlInputElement>().unwrap();
+                sku_input.set_value("");
                 sku.set(0);
                 let category_input = category_input_ref.cast::<HtmlInputElement>().unwrap();
                 category_input.set_value("");
                 category.set(String::new());
+                let quantity_input = quantity_input_ref.cast::<HtmlInputElement>().unwrap();
+                quantity_input.set_value("");
                 quantity.set(0);
+                let price_input = price_input_ref.cast::<HtmlInputElement>().unwrap();
+                price_input.set_value("");
                 price.set(0);
+                let sale_price_input = sale_price_input_ref.cast::<HtmlInputElement>().unwrap();
+                sale_price_input.set_value("");
                 sale_price.set(0);
+                let on_sale_input = on_sale_select_ref.cast::<HtmlInputElement>().unwrap();
+                on_sale_input.set_value("");
                 on_sale.set(false);
 
                 let response = api_create_product(product_data.to_string().as_str()).await;
@@ -245,6 +255,16 @@ pub fn ProductForm() -> Html {
                         set_loading(false, dispatch.clone());
                         set_show_alert("Product added successfully".to_string(), dispatch.clone());
                         set_product(product, dispatch);
+                        reset_form_fields(
+                            &title,
+                            &description,
+                            &sku,
+                            &category,
+                            &quantity,
+                            &price,
+                            &sale_price,
+                            &on_sale,
+                        );
                     }
                     Err(e) => {
                         set_loading(false, dispatch.clone());
@@ -293,6 +313,7 @@ pub fn ProductForm() -> Html {
                         onchange={handle_category_change}
                         class="w-full border p-1"
                     >
+                    <option disabled=true selected=true hidden=true>{"---"}</option>
                     <option value="clothing">{"Clothing"}</option>
                     <option value="books">{"Books"}</option>
                     <option value="electronics">{"Electronics"}</option>
@@ -323,6 +344,7 @@ pub fn ProductForm() -> Html {
                     {"Is this product on sale?"}
                     <input
                         type="checkbox"
+                        ref={on_sale_select_ref}
                         onchange={handle_on_sale_change}
                         class="border p-1 h-8 w-8"
                     />
@@ -335,4 +357,24 @@ pub fn ProductForm() -> Html {
             </form>
         </div>
     }
+}
+
+fn reset_form_fields(
+    title: &UseStateHandle<String>,
+    description: &UseStateHandle<String>,
+    sku: &UseStateHandle<i32>,
+    category: &UseStateHandle<String>,
+    quantity: &UseStateHandle<i32>,
+    price: &UseStateHandle<i32>,
+    sale_price: &UseStateHandle<i32>,
+    on_sale: &UseStateHandle<bool>,
+) {
+    title.set(String::new());
+    description.set(String::new());
+    sku.set(0);
+    category.set(String::new());
+    quantity.set(0);
+    price.set(0);
+    sale_price.set(0);
+    on_sale.set(false);
 }
