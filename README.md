@@ -26,7 +26,7 @@ Use the Makefile commands to setup a Postgres database using Docker:
 
 2. `make mup` will run a SQLx database migration to create the tables.
 
-    Now refresh or check the database and you should see the newly created product table with the columns provided in **[migrations/0001_product_table.up.sql](migrations/0001_product_table.up.sql)**.
+    Now refresh or check the database and you should see the newly created products table with the columns provided in **[migrations/0001_products_table.up.sql](migrations/0001_products_table.up.sql)**.
 
     Again, you can also check the database by accessing the PostgreSQL shell directly with:
 
@@ -41,15 +41,15 @@ Use the Makefile commands to setup a Postgres database using Docker:
     | Schema | Name              | Type   | Owner
     | ------ | ----------------- | ------ | ------
     | public | _sqlx_migrations  | table  | root
-    | public | product           | table  | root
+    | public | products           | table  | root
 
-    You can also check a specific table, for example the *product* table with:
+    You can also check a specific table, for example the *products* table with:
 
     ```bash
-    SELECT * FROM product;
+    SELECT * FROM products;
     ```
 
-    The output of the product table should have the columns provided in **[migrations/0001_product_table.up.sql](migrations/0001_product_table.up.sql)**, which should look something like this:
+    The output of the products table should have the columns provided in **[migrations/0001_products_table.up.sql](migrations/0001_products_table.up.sql)**, which should look something like this:
 
     | id | title | description | sku | category | quantity | price | sale_price | on_sale
     | -- | ----- | ----------- | --- | -------- | -------- | ----- | ---------- | -------
