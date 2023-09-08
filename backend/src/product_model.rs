@@ -11,7 +11,9 @@ pub struct ProductModel {
     pub title: String,
     pub description: String,
     pub sku: i32,
+    pub category: String,
     pub quantity: i32,
     pub price: i32,
     pub sale_price: i32,
+    pub on_sale: bool,
 }
