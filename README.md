@@ -1,4 +1,4 @@
-# Postgres Database with SQLx Queries
+# Rust Full Stack CRUD Application
 
 ## Stack: [SQLx](https://github.com/launchbadge/sqlx), [Yew](https://github.com/yewstack/yew)
 
