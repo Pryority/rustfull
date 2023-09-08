@@ -114,7 +114,9 @@ async fn create_product_handler(
                 .to_string()
                 .contains("duplicate key value violates unique constraint")
             {
-                return HttpResponse::BadRequest().json(serde_json::json!({"status": "fail", "message": "That product already exists!"}));
+                return HttpResponse::BadRequest().json(
+                    serde_json::json!({"status": "fail", "message": "That SKU already exists!"}),
+                );
             }
 
             return HttpResponse::InternalServerError()
