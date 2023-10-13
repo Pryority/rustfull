@@ -1,23 +1,14 @@
-// src/handler.rs
-
 use crate::{
-    product_model::ProductModel,
     schema::{CreateProductSchema, FilterOptions, UpdateProductSchema},
     AppState,
 };
 use actix_web::{delete, get, patch, post, web, HttpResponse, Responder};
+use common::model::product::Product;
 use serde_json::json;
-
-#[get("/health")]
-async fn health_checker_handler() -> impl Responder {
-    const MESSAGE: &str = "CRUD API with Rust, SQLx, Postgre, and Actix Web";
-
-    HttpResponse::Ok().json(json!({"status": "success", "message": MESSAGE}))
-}
 
 // GET ALL PRODUCTS
 #[get("/products")]
-pub async fn product_list_handler(
+pub async fn get_products(
     opts: web::Query<FilterOptions>,
     data: web::Data<AppState>,
 ) -> impl Responder {
@@ -25,7 +16,7 @@ pub async fn product_list_handler(
     let offset = (opts.page.unwrap_or(1) - 1) * limit;
 
     let query_result = sqlx::query_as!(
-        ProductModel,
+        Product,
         "SELECT * FROM products ORDER by id LIMIT $1 OFFSET $2",
         limit as i32,
         offset as i32,
@@ -51,10 +42,10 @@ pub async fn product_list_handler(
 
 // GET SINGLE PRODUCT
 #[get("/products/{sku}")]
-async fn get_product_handler(path: web::Path<u32>, data: web::Data<AppState>) -> impl Responder {
+pub async fn get_product(path: web::Path<u32>, data: web::Data<AppState>) -> impl Responder {
     let product_sku = path.into_inner();
     let query_result = sqlx::query_as!(
-        ProductModel,
+        Product,
         "SELECT * FROM products where sku = $1",
         product_sku as i32
     )
@@ -82,12 +73,12 @@ async fn get_product_handler(path: web::Path<u32>, data: web::Data<AppState>) ->
 
 // CREATE PRODUCT
 #[post("/products")]
-async fn create_product_handler(
+async fn create_product(
     body: web::Json<CreateProductSchema>,
     data: web::Data<AppState>,
 ) -> impl Responder {
     let query_result = sqlx::query_as!(
-        ProductModel,
+        Product,
         "INSERT INTO products (title,description,sku,category,quantity,price,sale_price,on_sale) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
         body.title.to_string(),
         body.description.to_string(),
@@ -127,14 +118,14 @@ async fn create_product_handler(
 
 // UPDATE PRODUCT
 #[patch("/products/{sku}")]
-async fn edit_product_handler(
+async fn edit_product(
     path: web::Path<u32>,
     body: web::Json<UpdateProductSchema>,
     data: web::Data<AppState>,
 ) -> impl Responder {
     let product_sku = path.into_inner();
     let query_result = sqlx::query_as!(
-        ProductModel,
+        Product,
         "SELECT * FROM products WHERE sku = $1",
         product_sku as i32
     )
@@ -150,7 +141,7 @@ async fn edit_product_handler(
     let product = query_result.unwrap();
 
     let query_result = sqlx::query_as!(
-        ProductModel,
+        Product,
         "UPDATE products SET title = $1, description = $2, category = $4, quantity = $5, price = $6, sale_price = $7, on_sale = $8 WHERE sku = $3 RETURNING *",
         body.title.to_owned().unwrap_or(product.title),
         body.description.to_owned().unwrap_or(product.description),
@@ -182,7 +173,7 @@ async fn edit_product_handler(
 
 // DELETE PRODUCT
 #[delete("/products/{sku}")]
-async fn delete_product_handler(path: web::Path<u32>, data: web::Data<AppState>) -> impl Responder {
+async fn delete_product(path: web::Path<u32>, data: web::Data<AppState>) -> impl Responder {
     let product_sku = path.into_inner();
     let rows_affected = sqlx::query!("DELETE FROM products WHERE sku = $1", product_sku as i32)
         .execute(&data.db)
@@ -196,16 +187,4 @@ async fn delete_product_handler(path: web::Path<u32>, data: web::Data<AppState>)
     }
 
     HttpResponse::NoContent().finish()
-}
-
-pub fn config(conf: &mut web::ServiceConfig) {
-    let scope = web::scope("/api")
-        .service(health_checker_handler)
-        .service(product_list_handler)
-        .service(create_product_handler)
-        .service(get_product_handler)
-        .service(edit_product_handler)
-        .service(delete_product_handler);
-
-    conf.service(scope);
 }

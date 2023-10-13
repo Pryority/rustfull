@@ -1,4 +1,4 @@
-// src/schema.rs
+// backend/src/schema.rs
 
 use serde::{Deserialize, Serialize};
 
