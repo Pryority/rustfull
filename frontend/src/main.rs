@@ -3,14 +3,64 @@
 mod api;
 mod components;
 mod store;
+mod views;
 
 use components::{
     alert::{AlertComponent, Props as AlertProps},
     product_form::ProductForm,
+    // single_product::Product,
 };
 use store::Store;
+use views::{products::Products, search_product::SearchProduct};
+// use views::category_catalogue::CategoryCatelogue;
 use yew::prelude::*;
+use yew_router::prelude::*;
 use yewdux::prelude::*;
+
+#[derive(Clone, Routable, PartialEq)]
+enum Route {
+    #[at("/")]
+    Home,
+    #[at("/admin")]
+    Admin,
+    #[at("/products")]
+    Products,
+    #[at("/product")]
+    SearchProduct,
+    #[at("/catelogue/:category")]
+    CategoryCatelogue,
+    #[not_found]
+    #[at("/404")]
+    NotFound,
+}
+
+fn switch(routes: Route) -> Html {
+    match routes {
+        Route::Home => html! { <h1>{ "Home" }</h1> },
+        Route::Admin => html! {
+            <>
+                <ProductForm/>
+            </>
+        },
+        Route::SearchProduct => html! {
+            <>
+                <SearchProduct />
+            </>
+        },
+        Route::Products => html! {
+            <>
+                <Products/>
+            </>
+        },
+        Route::CategoryCatelogue => html! {
+            <>
+                // <CategoryCatelogue category_name={Route::Admin.into_prop_value()} list_title={"list title"} products={backend::get_product_handler(web::Path::into_inner(), )}/>
+                // <Product title={"test"} sku={442}/>
+            </>
+        },
+        Route::NotFound => html! { <h1>{ "404" }</h1> },
+    }
+}
 
 #[function_component]
 fn App() -> Html {
@@ -19,22 +69,22 @@ fn App() -> Html {
     let show_alert = store.alert_input.show_alert;
     let loading = &store.loading;
 
-    let alert_props = AlertProps {
+    let alert = AlertProps {
         message,
         delay_ms: 5000,
     };
 
     html! {
-        <>
+        <BrowserRouter>
             if show_alert {
                 <AlertComponent
-                    message={alert_props.message}
-                    delay_ms={alert_props.delay_ms}
+                    message={alert.message}
+                    delay_ms={alert.delay_ms}
                 />
             }
 
             <main class="md:container mt-24 px-5">
-                <ProductForm/>
+            <Switch<Route> render={switch} /> // <- must be child of <BrowserRouter>
             </main>
             if *loading {
                 <div
@@ -46,7 +96,7 @@ fn App() -> Html {
                     </span>
                 </div>
             }
-        </>
+        </BrowserRouter>
     }
 }
 

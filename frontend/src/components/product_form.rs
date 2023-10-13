@@ -24,15 +24,15 @@ pub struct Product {
 #[function_component]
 pub fn ProductForm() -> Html {
     let (store, dispatch) = use_store::<Store>();
-    let loading = &store.loading;
-    let title: UseStateHandle<String> = use_state(String::new);
-    let description: UseStateHandle<String> = use_state(String::new);
-    let sku: UseStateHandle<i32> = use_state(|| 0);
-    let category: UseStateHandle<String> = use_state(String::new);
-    let quantity: UseStateHandle<i32> = use_state(|| 0);
-    let price: UseStateHandle<i32> = use_state(|| 0);
-    let sale_price: UseStateHandle<i32> = use_state(|| 0);
-    let on_sale: UseStateHandle<bool> = use_state(|| false);
+    // let loading = &store.loading;
+    let title = use_state(String::new);
+    let description = use_state(String::new);
+    let sku = use_state(|| 0);
+    let category = use_state(String::new);
+    let quantity = use_state(|| 0);
+    let price = use_state(|| 0);
+    let sale_price = use_state(|| 0);
+    let on_sale = use_state(|| false);
 
     let title_input_ref = use_node_ref();
     let desc_input_ref = use_node_ref();

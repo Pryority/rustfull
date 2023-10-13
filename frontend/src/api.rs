@@ -1,6 +1,6 @@
 // frontend/src/api.rs
 
-use common::{ErrorResponse, Product, ProductListResponse, ProductResponse};
+use common::model::product::{ErrorResponse, Product, ProductResponse};
 use reqwasm::http;
 
 pub async fn api_create_product(product_data: &str) -> Result<Product, String> {

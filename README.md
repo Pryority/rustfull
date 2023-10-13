@@ -1,4 +1,4 @@
-# Rust Full Stack CRUD Application
+# Rust Full Stack CRUD Applicationå
 
 ## Stack: [SQLx](https://github.com/launchbadge/sqlx), [Yew](https://github.com/yewstack/yew)
 

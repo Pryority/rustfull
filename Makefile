@@ -4,18 +4,17 @@ stop: stop-docker
 shutdown: shutdown-docker
 recreate: shutdown start rlog
 
-# Development alias for starting the backend and frontend
-# TODO: make this alias execute the targets concurrently
-#dev: serve trunk
-
+# Development target for starting frontend and backend together
+dev:
+	@make backend & make frontend & wait
 # Alias targets for migrating the databases
 mup: migrate-up
 
 # Development target for running the application's backend with cargo-watch
-serve:
+backend:
 	cd backend && cargo watch -q -c -w ./src/ -x run
 # Development target for running the application's frontend with trunk
-trunk:
+frontend:
 	cd frontend && trunk serve --port 3000
 
 # Target for running migrations
@@ -48,4 +47,4 @@ rlog:
 	@echo "\n️🔄🌱  POSTGRES DATABASE RECREATED"
 
 # Declare all targets as phony (no real files associated)
-.PHONY: postgres start stop shutdown recreate mup mdown dev trunk serve
+.PHONY: postgres start stop shutdown recreate mup mdown dev backend frontend

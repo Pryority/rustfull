@@ -1,4 +1,4 @@
-use common::Product;
+use common::model::product::Product;
 use serde::{Deserialize, Serialize};
 use yewdux::prelude::*;
 
@@ -21,13 +21,13 @@ pub fn set_product(product: Product, dispatch: Dispatch<Store>) {
     })
 }
 
-pub fn set_product_list(products: Vec<Product>, dispatch: Dispatch<Store>) {
-    dispatch.reduce_mut(move |store| store.products = products);
-}
+// pub fn set_product_list(products: Vec<Product>, dispatch: Dispatch<Store>) {
+//     dispatch.reduce_mut(move |store| store.products = products);
+// }
 
-pub fn delete_product(id: uuid::Uuid, dispatch: Dispatch<Store>) {
-    dispatch.reduce_mut(move |store| store.products.retain(|f| f.id != id));
-}
+// pub fn delete_product(id: uuid::Uuid, dispatch: Dispatch<Store>) {
+//     dispatch.reduce_mut(move |store| store.products.retain(|f| f.id != id));
+// }
 
 pub fn set_loading(loading: bool, dispatch: Dispatch<Store>) {
     dispatch.reduce_mut(move |store| {

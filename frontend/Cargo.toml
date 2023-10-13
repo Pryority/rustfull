@@ -19,3 +19,5 @@ web-sys = { version = "0.3.64", features = ["HtmlInputElement", "Window"] }
 yew = { version = "0.20.0", features = ["csr"] }
 yewdux = "0.9.3"
 common = { path = "../common" }
+yew-oauth2 = "0.6.3"
+yew-router = "0.17.0"
