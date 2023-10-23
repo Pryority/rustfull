@@ -37,7 +37,7 @@ pub fn AlertComponent(props: &Props) -> Html {
     );
 
     html! {
-    <div id="myToast" class={format!("fixed top-14 right-10 px-5 py-4 border-r-8 border-lime-500 bg-white drop-shadow-lg {}",
+    <div id="myToast" class={format!("fixed top-14 z-50 right-10 px-5 py-4 border-r-8 border-lime-500 bg-white drop-shadow-lg {}",
         if props.message == "That SKU already exists!"
         || props.message == "Title is required!"
         || props.message == "Description is required!"

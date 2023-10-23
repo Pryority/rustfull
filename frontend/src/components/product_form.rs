@@ -1,5 +1,5 @@
 use crate::{
-    api::api_create_product,
+    api::product::create_product,
     store::{set_loading, set_product, set_show_alert, Store},
 };
 
@@ -248,7 +248,7 @@ pub fn ProductForm() -> Html {
                 on_sale_input.set_value("");
                 on_sale.set(false);
 
-                let response = api_create_product(product_data.to_string().as_str()).await;
+                let response = create_product(product_data.to_string().as_str()).await;
 
                 match response {
                     Ok(product) => {
