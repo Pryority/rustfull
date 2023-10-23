@@ -2,7 +2,6 @@ use crate::{
     api::product::create_product,
     store::{set_loading, set_product, set_show_alert, Store},
 };
-
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::{Event, HtmlInputElement};

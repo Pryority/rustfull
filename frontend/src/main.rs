@@ -11,7 +11,7 @@ use components::{
     // single_product::Product,
 };
 use store::Store;
-use views::{products::Products, search_product::SearchProduct};
+use views::{home::Home, products::Products, search_product::SearchProduct};
 // use views::category_catalogue::CategoryCatelogue;
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -36,7 +36,11 @@ enum Route {
 
 fn switch(routes: Route) -> Html {
     match routes {
-        Route::Home => html! { <h1>{ "Home" }</h1> },
+        Route::Home => html! {
+            <>
+                <Home/>
+            </>
+        },
         Route::Admin => html! {
             <>
                 <ProductForm/>
